@@ -25,12 +25,20 @@
       #contentDisplay div[class*="col-md"] {
           margin-bottom: 30px;
       }
+      #contentDisplay div[class*="col-md"]>div {
+        border: 1px dashed #e2e2e2;
+      }
       .cein button{
             margin-top: 32px;
       }
        #paragraphEditor {overflow:scroll; max-height:300px}
        #addHtmlContent button, #addColumn button{
         margin-bottom: 5px;
+       }
+       .del-btn{
+          position: absolute;
+          top: 0px;
+          right: 15px;
        }
     </style>
   </head>
@@ -190,7 +198,7 @@
           <form id="paragraphForm" onsubmit="return false">
           <input type="hidden" id="pColumndID" value="" />
           <div class="form-group">
-            <textarea class="form-control" id="paragraph-text"></textarea>
+            <textarea class="form-control" id="paragraph-text" required></textarea>
           </div>
           <div class="form-group">
             <label class="radio-inline">
@@ -528,27 +536,29 @@
           $('#ceTextArea').show();
           $('#ceTextArea').val($('#contentDisplay').html());
         });
+
+        $('.container').on('mouseenter', '#contentDisplay div[class*="col-md"] > div:not(.cein)', function(){
+            $(this).append('<button class="btn btn-danger del-btn"><i class="glyphicon glyphicon-remove"></i></button>');
+        }); 
+        $('.container').on('mouseleave', '#contentDisplay div[class*="col-md"]', function(){
+            $(this).find('.del-btn').remove();
+        }); 
+
+        $(".container").on("click", ".del-btn", function(){
+          var delColId = $(this).parent().attr('class');
+          $(this).parent().addClass('cein');
+          $(this).parent().html('<button data-toggle="modal" data-target="#addHtmlContent" data-id="'+delColId+'" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></button>')
+           console.log($(this).parent());
+        });
+
+
+
       });
 
     </script>
             <script>
             var $imageupload = $('.imageupload');
             $imageupload.imageupload();
-
-            $('#imageupload-disable').on('click', function() {
-                $imageupload.imageupload('disable');
-                $(this).blur();
-            })
-
-            $('#imageupload-enable').on('click', function() {
-                $imageupload.imageupload('enable');
-                $(this).blur();
-            })
-
-            $('#imageupload-reset').on('click', function() {
-                $imageupload.imageupload('reset');
-                $(this).blur();
-            });
         </script>
   </body>
 </html>
