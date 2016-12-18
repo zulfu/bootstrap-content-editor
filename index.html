@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Content Editor</title>
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="css/bootstrap-imageupload.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    
+    <script src="js/bootstrap-imageupload.min.js"></script>
+    <style type="text/css">
+      .cein{
+        height: 100px;
+        background-color: #e2e2e2;
+        margin-bottom: 30px;
+        text-align: center;
+      }
+      #contentDisplay div[class*="col-md"] {
+          margin-bottom: 30px;
+      }
+      .cein button{
+            margin-top: 32px;
+      }
+       #paragraphEditor {overflow:scroll; max-height:300px}
+       #addHtmlContent button, #addColumn button{
+        margin-bottom: 5px;
+       }
+    </style>
+  </head>
+  <body>
+  <div class="container">
+
+
+    <div id="contentDisplay" style="margin-top:30px;"></div>
+
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <button type="button" data-toggle="modal" data-target="#addColumn" class="btn btn-primary" id="addColumnButton"><i class="glyphicon glyphicon-plus"></i> ADD</button>
+        <button class="btn btn-primary" id="generateHtml">GENERATE HTML CODE</button>
+      </div>
+    </div>
+    <div class="row" style="margin-top:30px;">
+      <div class="col-md-12">
+          <textarea style="height:200px;margin-bottom:30px;display:none;" class="form-control" id="ceTextArea"></textarea>
+      </div>
+    </div>
+
+
+  </div>
+
+  <div class="modal fade" id="addColumn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Add Column</h4>
+        </div>
+        <div class="modal-body">
+        <h2>Equal Columns</h2>
+        <div class="row">
+          <div class="col-md-6"><button data-column="1" class="btn btn-block btn-default add-column"><i class="glyphicon glyphicon-minus"></i></button></div>
+          <div class="col-md-6"><button data-column="2" class="btn btn-block btn-default add-column"><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i></button></div>
+          <div class="col-md-6"><button data-column="3" class="btn btn-block btn-default add-column"><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i></button></div>
+          <div class="col-md-6"><button data-column="4" class="btn btn-block btn-default add-column"><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i></button></div>
+          <div class="col-md-6"><button data-column="6" class="btn btn-block btn-default add-column"><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i></button></div>
+          <div class="col-md-6"><button data-column="12" class="btn btn-block btn-default add-column"><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i><i class="glyphicon glyphicon-minus"></i></button></div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <h2>Custom Columns</h2>
+            <div class="col-md-12"><input class="form-control" type="range" id="customColumns" value="6" name="points" min="0" max="12"></div>
+            <div class="col-md-12"><button data-column-left="6" data-column-right="6" class="btn btn-block btn-default customColumnResult add-custom-column">%50 - %50</button></div>
+          </div>
+        </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+    <div class="modal fade" id="addHtmlContent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel2">Add Element</h4>
+        </div>
+        <div class="modal-body">
+        <div class="row">
+          <div class="col-md-4">
+            <button data-toggle="modal" data-id="" data-target="#addHtmlHeading" data-html="h1" class="btn btn-default btn-block add-html"><i class="glyphicon glyphicon-header"></i> HEADING</button>
+          </div>
+          <div class="col-md-4">
+            <button data-toggle="modal" data-id="" data-target="#addHtmlP" data-html="p" class="btn btn-default btn-block add-html"><i class="glyphicon glyphicon-text-size"></i> PARAGRAPH</button>
+          </div>
+          <div class="col-md-4">
+            <button data-toggle="modal" data-id="" data-target="#addHtmlList" data-html="list" class="btn btn-block btn-default add-html"><i class="glyphicon glyphicon-th-list"></i> LIST</button>
+          </div>
+          <div class="col-md-4">
+            <button data-toggle="modal" data-id="" data-target="#addHtmlImage" data-html="image" class="btn btn-default btn-block add-html"><i class="glyphicon glyphicon-picture"></i> IMAGE</button>
+          </div>
+          <div class="col-md-4">
+            <button data-toggle="modal" data-id="" data-target="#addHtmlVideo" data-html="video" class="btn btn-block btn-default add-html"><i class="glyphicon glyphicon-facetime-video"></i> VIDEO</button>
+          </div>
+          <div class="col-md-4">
+            <button data-toggle="modal" data-id="" data-target="#addHtmlIframe" data-html="iframe" class="btn btn-block btn-default add-html"><i class="glyphicon glyphicon-sound-stereo"></i> IFRAME</button>
+          </div>
+        </div>
+          
+
+
+          
+          
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="addHtmlHeading" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel3">Add Heading</h4>
+        </div>
+        <div class="modal-body">
+          <form id="headingForm" onsubmit="return false">
+          <input type="hidden" id="h1ColumndID" value="" />
+          <div class="form-group">
+          <label class="radio-inline">
+            <input type="radio" name="heading-size" checked id="inlineRadio1" value="h1"> H1
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="heading-size" id="inlineRadio2" value="h2"> H2
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="heading-size" id="inlineRadio3" value="h3"> H3
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="heading-size" id="inlineRadio4" value="h4"> H4
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="heading-size" id="inlineRadio5" value="h5"> H5
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="heading-size" id="inlineRadio6" value="h4"> H6
+          </label>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" id="heading-text" placeholder="Heading Text">
+          </div>
+          <div class="form-group">
+
+          <label class="radio-inline">
+            <input type="radio" name="heading-align" checked id="radioAlign1" value="text-left"> LEFT
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="heading-align" id="radioAlign2" value="text-center"> CENTER
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="heading-align" id="radioAlign3" value="text-right"> RIGHT
+          </label>
+          </div>
+          <button type="submit" id="headingAddButton" class="btn btn-success">ADD</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="addHtmlP" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel4">Add Paragraph</h4>
+        </div>
+        <div class="modal-body">
+          <form id="paragraphForm" onsubmit="return false">
+          <input type="hidden" id="pColumndID" value="" />
+          <div class="form-group">
+            <textarea class="form-control" id="paragraph-text"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="radio-inline">
+              <input type="radio" name="paragraph-align" checked id="radioAlign1" value="text-left"> LEFT
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="paragraph-align" id="radioAlign2" value="text-center"> CENTER
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="paragraph-align" id="radioAlign3" value="text-right"> RIGHT
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="paragraph-align" id="radioAlign4" value="text-justify"> JUSTIFY
+            </label>
+          </div>
+          <button type="submit" id="paragraphAddButton" class="btn btn-success">ADD</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="addHtmlVideo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel5">Add Video</h4>
+        </div>
+        <div class="modal-body">
+          <form id="videoForm" onsubmit="return false">
+          <input type="hidden" id="videoColumndID" value="" />
+          <div class="form-group">
+            <input type="text" class="form-control" id="video-link">
+          </div>
+          <button type="submit" id="videoAddButton" class="btn btn-success">ADD</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="addHtmlIframe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel6">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel6">Add Iframe</h4>
+        </div>
+        <div class="modal-body">
+          <form id="iframeForm" onsubmit="return false">
+          <input type="hidden" id="iframeColumndID" value="" />
+          <div class="form-group">
+            <input type="text" class="form-control" id="iframe-link">
+          </div>
+          <button type="submit" id="iframeAddButton" class="btn btn-success">ADD</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="addHtmlList" tabindex="-1" role="dialog" aria-labelledby="myModalLabel7">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel7">Add List</h4>
+        </div>
+        <div class="modal-body">
+          <form id="listForm" onsubmit="return false">
+          <input type="hidden" id="listColumndID" value="" />
+          <div class="form-group">
+          <label class="radio-inline">
+            <input type="radio" name="list-type" checked id="inlineRadio1" value="ul"> Unordered List
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="list-type" id="inlineRadio2" value="ol"> Ordered List
+          </label>
+          </div>
+          <div class="form-group">
+          <label class="radio-inline">
+            <input type="radio" name="list-style" checked id="inlineRadio0" value=""> Normal
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="list-style" id="inlineRadio1" value="list-unstyled"> Unstyled List
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="list-style" id="inlineRadio2" value="list-inline"> Inline List
+          </label>
+          </div>
+          <div class="list-inputs">
+            
+            <div class="row">
+              <div class="col-md-10 ">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="List Element" required>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <a href="javascript:void(0)" class="btn btn-block btn-danger delListInput"><i class="glyphicon glyphicon-remove"></i></a>
+              </div>
+            </div>
+
+          </div>
+          <div class="row" style="margin-bottom:30px;">
+              <div class="col-md-12">
+                  <a href="javascript:void(0)" class="btn btn-block btn-primary addListInput"><i class="glyphicon glyphicon-plus"></i> ADD MORE</a>
+              </div>
+          </div>
+
+          <button type="submit" id="listAddButton" class="btn btn-success">ADD</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+    <div class="modal fade" id="addHtmlImage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel8">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel8">Add Image</h4>
+        </div>
+        <div class="modal-body">
+          <form id="imageForm" onsubmit="return false">
+          <input type="hidden" id="imageColumndID" value="" />
+              <div class="imageupload panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title pull-left">Upload Image</h3>
+                    <div class="btn-group pull-right">
+                        <button type="button" class="btn btn-default active">File</button>
+                        <button type="button" class="btn btn-default">URL</button>
+                    </div>
+                </div>
+                <div class="file-tab panel-body">
+                    <label class="btn btn-default btn-file">
+                        <span>Browse</span>
+                        <!-- The file is stored here. -->
+                        <input type="file" name="image-file">
+                    </label>
+                    <button type="button" class="btn btn-default">Remove</button>
+                </div>
+                <div class="url-tab panel-body">
+                    <div class="input-group">
+                        <input type="text" class="form-control hasclear" placeholder="Image URL">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default">Submit</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-default">Remove</button>
+                    <!-- The URL is stored here. -->
+                    <input type="hidden" name="image-url">
+                </div>
+            </div>
+            <div class="form-group">
+                  <input type="text" class="form-control" id="imageHref" placeholder="Image Link">
+            </div>
+          <button type="submit" id="imageAddButton" class="btn btn-success">ADD</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <script type="text/javascript">
+    function makeid()
+    {
+        var text = "";
+        var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( var i=0; i < 6; i++ )
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    }
+      $(document).ready(function() {
+        $('.add-column').click(function() {
+          var colCount = $(this).data('column');
+          var rowCols = '';
+          for (var i = 0; i < colCount; i++) { var columndID = makeid(); rowCols = rowCols + '<div class="col-md-'+(12/colCount)+'"><div class="cein ce-'+columndID+'"><button data-toggle="modal" data-target="#addHtmlContent" data-id="ce-'+columndID+'" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></button></div></div>'; }
+          //$('#ceTextArea').val($('#ceTextArea').val() + '<div class="row">'+rowCols+'</div>');
+          $('#contentDisplay').append('<div class="row">'+rowCols+'</div>');
+          $('#addColumn').modal('hide');
+        });
+
+        $('.add-custom-column').click(function() {
+          var columndID = makeid();
+          var colCountLeft = $(this).attr('data-column-left');
+          var colCountRight = $(this).attr('data-column-right');
+          var columnLeftHtml = '';
+          var columnRightHtml = '';
+          if(colCountLeft>0){
+            columnLeftHtml = '<div class="col-md-'+colCountLeft+'"><div class="cein ce-'+columndID+'"><button data-toggle="modal" data-target="#addHtmlContent" data-id="ce-'+columndID+'" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></button></div></div>';
+          }
+          columndID = makeid();
+          if(colCountRight>0){
+            columnRightHtml = '<div class="col-md-'+colCountRight+'"><div class="cein ce-'+columndID+'"><button data-toggle="modal" data-target="#addHtmlContent" data-id="ce-'+columndID+'" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></button></div></div>';
+          }
+          $('#contentDisplay').append('<div class="row">'+columnLeftHtml+columnRightHtml+'</div>');
+          $('#addColumn').modal('hide');
+        });
+
+        $('#addHtmlContent').on('show.bs.modal', function(event) {
+            var ssss = $(event.relatedTarget).data('id');
+            $('.add-html').attr('data-id', ssss);
+        });
+        $('#addHtmlHeading').on('show.bs.modal', function(e) {
+            var yyyy = $(e.relatedTarget);
+            $("#h1ColumndID").val(yyyy.attr('data-id'));
+        });
+        $('#addHtmlP').on('show.bs.modal', function(e) {
+            var pppp = $(e.relatedTarget);
+            $("#pColumndID").val(pppp.attr('data-id'));
+        });
+        $('#addHtmlVideo').on('show.bs.modal', function(e) {
+            var vvvv = $(e.relatedTarget);
+            $("#videoColumndID").val(vvvv.attr('data-id'));
+        });
+        $('#addHtmlIframe').on('show.bs.modal', function(e) {
+            var iiii = $(e.relatedTarget);
+            $("#iframeColumndID").val(iiii.attr('data-id'));
+        });
+        $('#addHtmlList').on('show.bs.modal', function(e) {
+            var llll = $(e.relatedTarget);
+            $("#listColumndID").val(llll.attr('data-id'));
+        });
+        $('#addHtmlImage').on('show.bs.modal', function(e) {
+            var mmmm = $(e.relatedTarget);
+            $("#imageColumndID").val(mmmm.attr('data-id'));
+        });
+        $('#headingForm').submit(function() {
+          var h1ColumndID = $('#h1ColumndID').val();
+          var headingText = $('#heading-text').val();
+          var headingSize = $("input:radio[name ='heading-size']:checked").val();
+          var headingAlign = $("input:radio[name ='heading-align']:checked").val();
+
+          $('.'+h1ColumndID).html('<'+headingSize+' class="'+headingAlign+'">'+headingText+'</'+headingSize+'>');
+          $('.'+h1ColumndID).removeClass('cein');
+          $('#headingForm')[0].reset();
+          $('#addHtmlHeading').modal('hide');
+          $('#addHtmlContent').modal('hide');
+
+        });
+        $('#listForm').submit(function() {
+          var listColumndID = $('#listColumndID').val();
+          var listStyle = $("input:radio[name ='list-style']:checked").val();
+          var listType = $("input:radio[name ='list-type']:checked").val();
+          var listItems = "";
+          $('.list-inputs .form-control').each(function(index, el) {
+            singleLi = '<li>'+$(this).val()+'</li>';
+            listItems=listItems+singleLi;
+          });
+
+          $('.'+listColumndID).html('<'+listType+' class="'+listStyle+'">'+listItems+'</'+listType+'>');
+          $('.'+listColumndID).removeClass('cein');
+          $('#listForm')[0].reset();
+          $('#addHtmlList').modal('hide');
+          $('#addHtmlContent').modal('hide');
+
+        });
+        $('#paragraphForm').submit(function() {
+          var pColumndID = $('#pColumndID').val();
+          var paragraphText = $('#paragraph-text').val();
+          var paragraphAlign = $("input:radio[name ='paragraph-align']:checked").val();
+
+          $('.'+pColumndID).html('<p class="'+paragraphAlign+'">'+paragraphText+'</p>');
+          $('.'+pColumndID).removeClass('cein');
+          $('#paragraphForm')[0].reset();
+          $('#addHtmlP').modal('hide');
+          $('#addHtmlContent').modal('hide');
+
+        });
+        $('#videoForm').submit(function() {
+          var videoColumndID = $('#videoColumndID').val();
+          var videoLink = $('#video-link').val();
+
+          $('.'+videoColumndID).html('<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8/'+videoLink+'"></iframe></div>');
+          $('.'+videoColumndID).removeClass('cein');
+          $('#videoForm')[0].reset();
+          $('#addHtmlVideo').modal('hide');
+          $('#addHtmlContent').modal('hide');
+
+        });
+        $('#iframeForm').submit(function() {
+          var iframeColumndID = $('#iframeColumndID').val();
+          var iframeLink = $('#iframe-link').val();
+
+          $('.'+iframeColumndID).html('<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="'+iframeLink+'"></iframe></div>');
+          $('.'+iframeColumndID).removeClass('cein');
+          $('#iframeForm')[0].reset();
+          $('#addHtmlIframe').modal('hide');
+          $('#addHtmlContent').modal('hide');
+
+        });
+        $('#imageForm').submit(function() {
+          var imageColumndID = $('#imageColumndID').val();
+          var imageHref = $('#imageHref').val();
+          var imageLink = $('.imageupload .thumbnail').attr('src');
+          if( !imageHref ) {
+              $('.'+imageColumndID).html('<img src="'+imageLink+'" class="img-responsive">');  
+          }else{
+              $('.'+imageColumndID).html('<a href="'+imageHref+'"><img src="'+imageLink+'" class="img-responsive"></a>'); 
+          }
+          
+          $('.'+imageColumndID).removeClass('cein');
+          $('#imageForm')[0].reset();
+          $('#addHtmlImage').modal('hide');
+          $('#addHtmlContent').modal('hide');
+          $imageupload.imageupload('reset');
+        });
+        $('.addListInput').click(function() {
+          $('.list-inputs').append('<div class="row"><div class="col-md-10"><div class="form-group"><input required type="text" class="form-control" placeholder="List Element"></div></div><div class="col-md-2"><a href="javascript:void(0)" class="btn btn-block btn-danger delListInput"><i class="glyphicon glyphicon-remove"></i></a></div></div>');
+        });
+
+        $(".list-inputs").on("click", ".delListInput", function(){
+           $(this).parent().parent().remove();
+        });
+        var colRight = 0;
+        var colLeft = 0;
+        var customColVal = 0;
+        $('#customColumns').change(function() {
+          customColVal = $(this).val();
+          colLeft = Math.round((100/12)*(customColVal));
+          colRight = 100-colLeft;
+          $('.customColumnResult').attr('data-column-left', customColVal);
+          $('.customColumnResult').attr('data-column-right', 12-customColVal);
+          $('.customColumnResult').text('%'+colLeft+' - %'+colRight)
+        });
+
+        $('#generateHtml').click(function() {
+          $('#ceTextArea').show();
+          $('#ceTextArea').val($('#contentDisplay').html());
+        });
+      });
+
+    </script>
+            <script>
+            var $imageupload = $('.imageupload');
+            $imageupload.imageupload();
+
+            $('#imageupload-disable').on('click', function() {
+                $imageupload.imageupload('disable');
+                $(this).blur();
+            })
+
+            $('#imageupload-enable').on('click', function() {
+                $imageupload.imageupload('enable');
+                $(this).blur();
+            })
+
+            $('#imageupload-reset').on('click', function() {
+                $imageupload.imageupload('reset');
+                $(this).blur();
+            });
+        </script>
+  </body>
+</html>
